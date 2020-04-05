@@ -179,27 +179,39 @@ class pegawaiListRondo extends State<pegawaiList> {
                           margin: const EdgeInsets.only(top: 20,bottom: 20),
                           padding: const EdgeInsets.only(left: 40),
                           alignment: Alignment(-1.0,-1.0),
-                          child: Text(
-                            'Minggu',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20,bottom: 20),
-                          padding: const EdgeInsets.only(left: 40),
-                          alignment: Alignment(-1.0,-1.0),
-                          child: Text(
-                            'Bulan',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20,bottom: 20),
-                          padding: const EdgeInsets.only(left: 40),
-                          alignment: Alignment(-1.0,-1.0),
-                          child: Text(
-                            'Tahun',
-                            style: TextStyle(fontSize: 30),
+                          child: new Table(
+                            children: [
+                              TableRow(children: [
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('Minggu', style: new TextStyle(fontSize: 30.0),),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('4,0 Juta', style: new TextStyle(fontSize: 30.0),),
+                                )
+                              ]),
+                              TableRow(children: [
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('Bulan', style: new TextStyle(fontSize: 30.0),),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('4,0 Juta', style: new TextStyle(fontSize: 30.0),),
+                                )
+                              ]),
+                              TableRow(children: [
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('Tahun', style: new TextStyle(fontSize: 30.0),),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('4,0 Juta', style: new TextStyle(fontSize: 30.0),),
+                                )
+                              ]),
+                            ],
                           ),
                         )
                       ],
@@ -218,37 +230,74 @@ class pegawaiListRondo extends State<pegawaiList> {
                           padding: const EdgeInsets.only(left: 40),
                           alignment: Alignment(-1.0,-1.0),
                           child: Text(
-                            'Gaji',
+                            'More',
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 20,bottom: 20),
-                          padding: const EdgeInsets.only(left: 40),
+                          padding: const EdgeInsets.only(left: 40, right: 40),
                           alignment: Alignment(-1.0,-1.0),
-                          child: Text(
-                            'Gaji',
-                            style: TextStyle(fontSize: 30),
-                          ),
+                          child: new Table(
+                            children: [
+                              TableRow(children: [
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('Gaji', style: new TextStyle(fontSize: 30.0),),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: RaisedButton(
+                                    color: Colors.orangeAccent,
+                                    onPressed: (){
+
+                                    },
+                                    child: const Text(
+                                        'Tinjau',
+                                        style: TextStyle(fontSize: 20)
+                                    ),
+                                  )
+                                )
+                              ]),
+                              TableRow(children: [
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('Absen', style: new TextStyle(fontSize: 30.0),),
+                                ),
+                                Container(
+                                    margin: const EdgeInsets.only(bottom: 25),
+                                    child: RaisedButton(
+                                      color: Colors.orangeAccent,
+                                      onPressed: (){
+
+                                      },
+                                      child: const Text(
+                                          'Tinjau',
+                                          style: TextStyle(fontSize: 20)
+                                      ),
+                                    )
+                                  )
+                                ]),
+                              TableRow(children: [
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Text('Akun', style: new TextStyle(fontSize: 30.0),),
+                                ),
+                                Container(
+                                    margin: const EdgeInsets.only(bottom: 25),
+                                    child: RaisedButton(
+                                      color: Colors.red,
+                                      onPressed: (){
+
+                                      },
+                                      child: const Text(
+                                          'Hapus', style: TextStyle(fontSize: 20)
+                                      ),
+                                    )
+                                )
+                              ]),
+                            ],),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20,bottom: 20),
-                          padding: const EdgeInsets.only(left: 40),
-                          alignment: Alignment(-1.0,-1.0),
-                          child: Text(
-                            'Gaji',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20,bottom: 20),
-                          padding: const EdgeInsets.only(left: 40),
-                          alignment: Alignment(-1.0,-1.0),
-                          child: Text(
-                            'Gaji',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                        )
                       ],
                     )
                 ),
