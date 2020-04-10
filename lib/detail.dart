@@ -150,19 +150,19 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-        image: DecorationImage(image : AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0)
+                      color: Colors.orange,
+                      borderRadius: new BorderRadius.only(
+                        bottomLeft: const Radius.circular(25.0),
+                        bottomRight: const Radius.circular(25.0),
+                      )
                   ),
-                  padding: const EdgeInsets.all(15.0),
-                  margin: const EdgeInsets.only(top: 70.0, left: 25.0, right: 25.0),
+                  padding: const EdgeInsets.only(top: 100, bottom: 50, left: 20, right: 20),
                   child: Table(
                      border: TableBorder.all(width: 1.0,color: Colors.black),
                     children: [
@@ -198,6 +198,7 @@ class _DetailState extends State<Detail> {
                                 shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
+                              color: Colors.orange,
                               child: Container(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -487,10 +488,7 @@ class EditOderanRondo extends State<EditOrderan>{
 
 
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(decoration: BoxDecoration(
-      image: DecorationImage(
-          image: AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
-
+    return Scaffold(body: Container(
       child: Stack(
         children: <Widget>[
           new Container(
@@ -977,11 +975,17 @@ class EditPemesananRondo extends State<EditPemesanan>{
     return Scaffold(
       resizeToAvoidBottomPadding: false,
         body: Container(
-        decoration: BoxDecoration(
-        image: DecorationImage(image : AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
+          margin: const EdgeInsets.only(top: 150.0, left: 20.0, right: 20.0),
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20),
+          decoration: BoxDecoration(
+            color: Colors.orange,
+              borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(40.0),
+                topRight: const Radius.circular(40.0),
+              )
+          ),
           child: Center(
             child: Container(
-              margin: const EdgeInsets.only(top: 150.0, left: 50.0, right: 50.0),
               child: new Form(
                 child: new Column(
                   children: <Widget>[

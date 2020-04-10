@@ -99,7 +99,7 @@ class LaporanRondo extends State<Laporan> {
   }
 
   Future<List> getData() async {
-    final response = await http.get("http://timothy.buzz/juljol/get.php");
+    final response = await http.get("http://timothy.buzz/juljol/get_pemesanan_detail_only_selesai.php");
     return json.decode(response.body);
   }
 
@@ -201,11 +201,11 @@ class LaporanRondo extends State<Laporan> {
                                             Expanded(
                                               child: new ListTile(
                                                 title: new Text(
-                                                  snapshot.data[i]['Alamat'],
+                                                  snapshot.data[i]['ALamat'],
                                                   style: TextStyle(fontSize: 25.0, color: Colors.orangeAccent),
                                                 ),
                                                 subtitle: new Text(
-                                                  "Pengantar : ${snapshot.data [i]['Pekerja']}",
+                                                  "Pengantar : ${snapshot.data [i]['pengantar']}",
                                                   style: TextStyle(fontSize: 20.0, color: Colors.black),
                                                 ),
                                               ),

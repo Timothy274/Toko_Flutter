@@ -74,6 +74,22 @@ class DataAlamat {
   }
 }
 
+class DataCek {
+  String nama;
+
+  DataCek({
+    this.nama,
+  });
+
+  factory DataCek.fromJson(Map<String, dynamic> json) {
+    return DataCek(
+        nama: json['pengantar']
+    );
+  }
+}
+
+
+
 class Order extends StatefulWidget{
   List list;
   String pekerja;
@@ -92,6 +108,7 @@ class OrderRondo extends State<Order> {
   List<DataDetail> _searchDetails= [];
   List<DataAlamat> _dataDetailsAlamat = [];
   List<DataAlamat> _searchDetailsAlamat = [];
+  List<DataCek>_dataDetailsCekData = [];
   int siul = 0;
   int aqua = 0;
   int vit = 0;
@@ -108,11 +125,119 @@ class OrderRondo extends State<Order> {
   var menit = Jiffy().format("mm");
   var detik = Jiffy().format("SS");
 
-  Future<List<DataAlamat>> getData() async {
+  bool _ignoring;
+
+  String _mySelection;
+
+  List _pekerja = List(); //edited line
+
+
+  Future<String> CekData() async {
+    final response = await http.get("http://timothy.buzz/juljol/get_pemesanan_only_nama.php");
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      for (Map Data in responseJson) {
+        _dataDetailsCekData.add(DataCek.fromJson(Data));
+      }
+    });
+  }
+
+  Future<String> getSWData() async {
+    final response = await http.get("http://timothy.buzz/juljol/get_pegawai.php");
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      _pekerja = responseJson;
+    });
+  }
+
+  Future<List<DataBarang>> getDataBarang() async {
+    await Future.delayed(Duration(seconds: 2));
     final responseC = await http.get("http://timothy.buzz/juljol/get_barang.php");
     final responseJsonC = json.decode(responseC.body);
+
+    setState(() {
+      for (Map Data in responseJsonC) {
+        _dataDetailsBarang.add(DataBarang.fromJson(Data));
+      }
+    });
+
+    var p = _searchDetails.length;
+    for (int a = 0;a < p;a++){
+      if(_searchDetails[a].Barang == 'Siul'){
+        siul = siul + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'Aqua'){
+        aqua = aqua + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'Vit'){
+        vit = vit + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'Gas_kcl'){
+        gaskcl = gaskcl + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'Gas_bsr'){
+        gasbsr = gasbsr + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'Vit_gls'){
+        vitgls = vitgls + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'Aqua_gls'){
+        aquagls = aquagls + int.parse(_searchDetails[a].Jumlah);
+      }
+    }
+
+    hrgsiul = siul * int.parse(_dataDetailsBarang[0].Harga);
+    hrgaqua = aqua * int.parse(_dataDetailsBarang[2].Harga);
+    hrgvit = vit * int.parse(_dataDetailsBarang[3].Harga);
+    hrggaskcl = gaskcl * int.parse(_dataDetailsBarang[4].Harga);
+    hrggasbsr = gasbsr * int.parse(_dataDetailsBarang[5].Harga);
+    hrgvitgls = vitgls * int.parse(_dataDetailsBarang[6].Harga);
+    hrgaquagls = aquagls * int.parse(_dataDetailsBarang[7].Harga);
+
+    total = hrgsiul + hrgaqua + hrgvit + hrggaskcl + hrggasbsr + hrgvitgls + hrgaquagls;
+
+    brtsiul = siul * int.parse(_dataDetailsBarang[0].Berat);
+    brtaqua = aqua * int.parse(_dataDetailsBarang[2].Berat);
+    brtvit = vit * int.parse(_dataDetailsBarang[3].Berat);
+    brtgaskcl = gaskcl * int.parse(_dataDetailsBarang[4].Berat);
+    brtgasbsr = gasbsr * int.parse(_dataDetailsBarang[5].Berat);
+    brtvitgls = vitgls * int.parse(_dataDetailsBarang[6].Berat);
+    brtaquagls = aquagls * int.parse(_dataDetailsBarang[7].Berat);
+
+    totalberat = brtsiul + brtaqua + brtvit + brtgaskcl + brtgasbsr + brtvitgls + brtaquagls;
+
+    if(total < 10000){
+      Modal = 10000;
+    } else if (total < 20000 && total > 10000){
+      Modal = 20000;
+    } else if (total < 50000 && total > 20000){
+      Modal = 50000;
+    } else if (total < 100000 && total > 50000){
+      Modal = 100000;
+    } else if (total < 150000 && total > 100000){
+      Modal = 150000;
+    } else if (total < 200000 && total > 150000){
+      Modal = 200000;
+    } else {
+      Modal = 300000;
+    }
+
+  }
+
+  Future<List<DataDetail>> getDataDetail() async {
     final responseB = await http.get("http://timothy.buzz/juljol/get_detail.php");
     final responseJsonB = json.decode(responseB.body);
+
+    setState(() {
+      for (Map Data in responseJsonB) {
+        _dataDetails.add(DataDetail.fromJson(Data));
+      }
+      widget.list.forEach((n) {
+        _dataDetails.forEach((b) {
+          if (b.id_pemesanan.contains(n))
+            _searchDetails.add(b);
+        });
+      });
+    });
+  }
+
+  Future<List<DataAlamat>> getData() async {
     final responseA = await http.get("http://timothy.buzz/juljol/get.php");
     final responseJsonA = json.decode(responseA.body);
 
@@ -126,79 +251,99 @@ class OrderRondo extends State<Order> {
             _searchDetailsAlamat.add(a);
         });
       });
-
-      for (Map Data in responseJsonB) {
-        _dataDetails.add(DataDetail.fromJson(Data));
-      }
-      widget.list.forEach((n) {
-        _dataDetails.forEach((b) {
-          if (b.id_pemesanan.contains(n))
-            _searchDetails.add(b);
-        });
-      });
-
-      for (Map Data in responseJsonC) {
-        _dataDetailsBarang.add(DataBarang.fromJson(Data));
-      }
-
-      var p = _searchDetails.length;
-      for (int a = 0;a < p;a++){
-        if(_searchDetails[a].Barang == 'Siul'){
-          siul = siul + int.parse(_searchDetails[a].Jumlah);
-        } else if (_searchDetails[a].Barang == 'Aqua'){
-          aqua = aqua + int.parse(_searchDetails[a].Jumlah);
-        } else if (_searchDetails[a].Barang == 'Vit'){
-          vit = vit + int.parse(_searchDetails[a].Jumlah);
-        } else if (_searchDetails[a].Barang == 'Gas_kcl'){
-          gaskcl = gaskcl + int.parse(_searchDetails[a].Jumlah);
-        } else if (_searchDetails[a].Barang == 'Gas_bsr'){
-          gasbsr = gasbsr + int.parse(_searchDetails[a].Jumlah);
-        } else if (_searchDetails[a].Barang == 'Vit_gls'){
-          vitgls = vitgls + int.parse(_searchDetails[a].Jumlah);
-        } else if (_searchDetails[a].Barang == 'Aqua_gls'){
-          aquagls = aquagls + int.parse(_searchDetails[a].Jumlah);
-        }
-      }
-
-      hrgsiul = siul * int.parse(_dataDetailsBarang[0].Harga);
-      hrgaqua = aqua * int.parse(_dataDetailsBarang[2].Harga);
-      hrgvit = vit * int.parse(_dataDetailsBarang[3].Harga);
-      hrggaskcl = gaskcl * int.parse(_dataDetailsBarang[4].Harga);
-      hrggasbsr = gasbsr * int.parse(_dataDetailsBarang[5].Harga);
-      hrgvitgls = vitgls * int.parse(_dataDetailsBarang[6].Harga);
-      hrgaquagls = aquagls * int.parse(_dataDetailsBarang[7].Harga);
-
-      total = hrgsiul + hrgaqua + hrgvit + hrggaskcl + hrggasbsr + hrgvitgls + hrgaquagls;
-
-      brtsiul = siul * int.parse(_dataDetailsBarang[0].Berat);
-      brtaqua = aqua * int.parse(_dataDetailsBarang[2].Berat);
-      brtvit = vit * int.parse(_dataDetailsBarang[3].Berat);
-      brtgaskcl = gaskcl * int.parse(_dataDetailsBarang[4].Berat);
-      brtgasbsr = gasbsr * int.parse(_dataDetailsBarang[5].Berat);
-      brtvitgls = vitgls * int.parse(_dataDetailsBarang[6].Berat);
-      brtaquagls = aquagls * int.parse(_dataDetailsBarang[7].Berat);
-
-      totalberat = brtsiul + brtaqua + brtvit + brtgaskcl + brtgasbsr + brtvitgls + brtaquagls;
-
-      if(total < 10000){
-        Modal = 10000;
-      } else if (total < 20000 && total > 10000){
-        Modal = 20000;
-      } else if (total < 50000 && total > 20000){
-        Modal = 50000;
-      } else if (total < 100000 && total > 50000){
-        Modal = 100000;
-      } else if (total < 150000 && total > 100000){
-        Modal = 150000;
-      } else if (total < 200000 && total > 150000){
-        Modal = 200000;
-      }
     });
   }
+
 
   void initState(){
     super.initState();
     getData();
+    getDataDetail();
+    getDataBarang();
+    getSWData();
+    PilihPegawai();
+    CekData();
+    _mySelection = widget.pekerja;
+  }
+
+  void PilihPegawai(){
+    if(_mySelection == "Default") {
+      _ignoring = false;
+    } else {
+      _ignoring = true;
+    }
+  }
+
+  void cek_pengantar_lanjut(eksepsi){
+    var p = _dataDetailsCekData.length;
+    int b = eksepsi;
+    for (int a = 0; a < p;a++){
+      if(_dataDetailsCekData[a].nama == widget.pekerja){
+        b++;
+      }
+    }
+    if (b == p){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Pegawai sedang dalam On Going"),
+            content: new Text("Mohon untuk memeriksa apakah Pegawai masih dalam On Going atau belum menyelesaikan order"),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      order();
+      order_detail();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context)=> new GridLayoutRondo()),
+            (Route<dynamic> route) => false,
+      );
+    }
+  }
+  void cek_pengantar(){
+    if(_mySelection == "Default") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Anda belum mengigisi pengantar"),
+            content: new Text("Mohon untuk mengisi kembali pegawai yang akan mengantar pesanan ini"),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (_mySelection != "Default"){
+      var p = _dataDetailsCekData.length;
+      if (p == 1){
+        int b = 0;
+        cek_pengantar_lanjut(b);
+      } else {
+        int b = 1;
+        cek_pengantar_lanjut(b);
+      }
+    }
   }
 
   void order(){
@@ -232,26 +377,31 @@ class OrderRondo extends State<Order> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(decoration: BoxDecoration(
-      image: DecorationImage(
-          image: AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
-
+    return Scaffold(body: Container(
       child: Stack(
         children: <Widget>[
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Container(
+                  decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(25.0),
+                        topRight: const Radius.circular(25.0),
+                      )
+                  ),
                   child: Column(
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0, bottom: 20.0),
+                        margin: const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0, bottom: 10.0),
                         child: Text(
-                          "Order",
+                          widget.pekerja,
                           style: new TextStyle(fontSize: 30),
                         ),
                       ),
                       Container(
+                        margin: const EdgeInsets.only(left: 20, right: 20),
                         padding: const EdgeInsets.only(bottom: 30),
                         decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
@@ -287,7 +437,28 @@ class OrderRondo extends State<Order> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 100, left: 20.0, right: 20.0, bottom: 20.0),
+                  margin: EdgeInsets.only(top: 70),
+                  width: 270.0,
+                  child: IgnorePointer(
+                    ignoring: _ignoring,
+                    child: DropdownButton<String>(
+                      items: _pekerja.map((item){
+                        return DropdownMenuItem<String>(
+                          value: item['Nama'],
+                          child: Text(item['Nama']),
+                        );
+                      }).toList(),
+                      onChanged: (String newValueSelected) {
+                        setState(() {
+                          this._mySelection = newValueSelected;
+                        });
+                      },
+                      value: _mySelection,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0, bottom: 20.0),
                   child: DataTable(
                     columns: [
                       DataColumn(label: Text('Barang')),
@@ -366,14 +537,7 @@ class OrderRondo extends State<Order> {
     ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          order();
-          order_detail();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context)=> new GridLayoutRondo()),
-                (Route<dynamic> route) => false,
-          );
+          cek_pengantar();
         },
         icon: Icon(Icons.save),
         label: Text("Kirim"),
@@ -381,6 +545,4 @@ class OrderRondo extends State<Order> {
       ),
     );
   }
-
-
 }

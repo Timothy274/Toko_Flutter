@@ -31,6 +31,55 @@ class DataDetail {
   }
 }
 
+class DataBarangDetail {
+  String id_pemesanan;
+  String Barang;
+  String Jumlah;
+
+  DataBarangDetail({
+    this.id_pemesanan,
+    this.Barang,
+    this.Jumlah
+  });
+
+  factory DataBarangDetail.fromJson(Map<String, dynamic> json) {
+    return DataBarangDetail(
+        id_pemesanan: json['id_pemesanan'],
+        Barang: json['Barang'],
+        Jumlah: json['Jumlah']
+    );
+  }
+}
+
+class DataBarang {
+  String Nama;
+  String Harga;
+  String Stok;
+  String id_pemesanan;
+  String Barang;
+  String Jumlah;
+
+  DataBarang({
+    this.Nama,
+    this.Harga,
+    this.Stok,
+    this.id_pemesanan,
+    this.Barang,
+    this.Jumlah
+  });
+
+  factory DataBarang.fromJson(Map<String, dynamic> json) {
+    return DataBarang(
+        Nama: json['Nama'],
+        Harga: json['Harga'],
+        Stok: json['Stok'],
+        id_pemesanan: json['id_pemesanan'],
+        Barang: json['Barang'],
+        Jumlah: json['Jumlah']
+    );
+  }
+}
+
 class Detail_Order_berjalan extends StatefulWidget {
   List list;
   int index;
@@ -42,6 +91,10 @@ class Detail_Order_berjalan extends StatefulWidget {
 class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
   List<DataDetail> _dataDetails = [];
   List<DataDetail> _searchDetails = [];
+  List<DataBarangDetail> _databarangDetails = [];
+  List<DataBarangDetail> _searchbarangDetails = [];
+  List<DataBarang> _dataBarang = [];
+  List<DataBarang> _searchdataBarang = [];
   var siul,aqua,vit,gaskcl,gasbsr,vitgls,aquagls;
 
   void kirim(data){
@@ -52,10 +105,17 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
     );
   }
 
-  void deleteData(){
-    var url="http://timothy.buzz/juljol/delete.php";
+  void deleteData_Pemesanan(){
+    var url="http://timothy.buzz/juljol/delete_pemesanan.php";
     http.post(url, body: {
-      'id_pemesanan': widget.list[widget.index]['id_pemesanan']
+      'id_order': widget.list[widget.index]['id_order']
+    });
+  }
+
+  void deleteData_PemesananDetail(){
+    var url="http://timothy.buzz/juljol/delete_pemesanan_detail.php";
+    http.post(url, body: {
+      'id_order': widget.list[widget.index]['id_order']
     });
   }
 
@@ -78,7 +138,8 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
             "OK DELETE!", style: new TextStyle(color: Colors.black),),
           color: Colors.red,
           onPressed: () {
-            deleteData();
+            deleteData_Pemesanan();
+            deleteData_PemesananDetail();
             deleteDataDetail();
             Navigator.pushAndRemoveUntil(
               context,
@@ -115,28 +176,115 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
     });
   }
 
+  Future<List<DataBarangDetail>> getDataBarang() async {
+    final response = await http.get("http://timothy.buzz/juljol/get_detail.php");
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      for (Map Data in responseJson) {
+        _databarangDetails.add(DataBarangDetail.fromJson(Data));
+      }
+      _databarangDetails.forEach((dataDetail) {
+        var a = _searchDetails.length;
+        for(int b = 0;b < a;b++){
+          if (dataDetail.id_pemesanan.contains(_searchDetails[b].id_pemesanan))
+            _searchbarangDetails.add(dataDetail);
+        }
+      });
+    });
+  }
+
+  Future<List<DataBarang>> getBarang() async {
+    final response = await http.get("http://timothy.buzz/juljol/get_stock.php");
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      for (Map Data in responseJson) {
+        _dataBarang.add(DataBarang.fromJson(Data));
+      }
+      _dataBarang.forEach((dataDetail) {
+        var a = _searchDetails.length;
+        for(int b = 0;b < a;b++){
+          if (dataDetail.id_pemesanan.contains(_searchDetails[b].id_pemesanan))
+            _searchdataBarang.add(dataDetail);
+        }
+      });
+    });
+  }
+
+
   void initState() {
     super.initState();
     getData();
+    getDataBarang();
+    getBarang();
+  }
+
+  void stock(){
+    var url = "http://timothy.buzz/juljol/update_stock_after.php";
+    var l = _searchdataBarang.length;
+    for(int b = 0;b < l;b++){
+      var a = int.parse(_searchdataBarang[b].Jumlah);
+      var c = int.parse(_searchdataBarang[b].Stok);
+      var hasil = (c - a);
+      http.post(url, body: {
+        "Nama": _searchdataBarang[b].Barang,
+        "Jumlah": hasil.toString(),
+      });
+    }
+  }
+
+  void recreate(){
+    var url = "http://timothy.buzz/juljol/adddata.php";
+    var a = _searchDetails.length;
+    for(int b = 0;b < a;b++){
+      http.post(url, body: {
+        "id_pemesanan": _searchDetails[b].id_pemesanan,
+        "Tanggal": widget.list[widget.index]['Tanggal'],
+        "Pekerja" : widget.list[widget.index]['pengantar'],
+        "Alamat": _searchDetails[b].Alamat,
+      });
+    }
+  }
+
+  void konfirmasi_pemesanan_detail(){
+    var url = "http://timothy.buzz/juljol/addpemesenan_detail_selesai.php";
+    var a = _searchDetails.length;
+    for (int x = 0;x < a;x++){
+      http.post(url, body: {
+        "id_pemesanan": _searchDetails[x].id_pemesanan,
+      });
+    }
+  }
+
+  void konfirmasi_pemesanan(){
+    var url = "http://timothy.buzz/juljol/addpemesanan_selesai.php";
+    var a = _searchDetails.length;
+    for (int x = 0;x < a;x++){
+      http.post(url, body: {
+        "id_order": _searchDetails[x].id_order,
+      });
+    }
+    stock();
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(image : AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0)
+                      color: Colors.orange,
+                      borderRadius: new BorderRadius.only(
+                        bottomLeft: const Radius.circular(25.0),
+                        bottomRight: const Radius.circular(25.0),
+                      )
                   ),
-                  padding: const EdgeInsets.all(15.0),
-                  margin: const EdgeInsets.only(top: 70.0, left: 25.0, right: 25.0),
+                  padding: const EdgeInsets.only(top: 100, bottom: 50, left: 20, right: 20),
                   child: Table(
                     border: TableBorder.all(width: 1.0,color: Colors.black),
                     children: [
@@ -172,8 +320,8 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
+                                  color: Colors.orange,
                                   child: Container(
-                                    color: Colors.blue,
                                     child: GestureDetector(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,26 +354,48 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     new Container(
-                      margin: const EdgeInsets.all(20.0),
+                      margin: const EdgeInsets.all(10.0),
                       child: RaisedButton(
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => _accDialog(context),
+                          recreate();
+                          deleteData_Pemesanan();
+                          deleteData_PemesananDetail();
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context)=> new GridLayoutRondo()),
+                                (Route<dynamic> route) => false,
                           );
                         },
-                        child: new Text("EDIT"),
+                        child: new Text("CANCEL"),
                         color: Colors.green,
                       ),
                     ),
                     new Container(
-                      margin: const EdgeInsets.all(20.0),
+                      margin: const EdgeInsets.all(10.0),
                       child: RaisedButton(
                         onPressed: () {
-                          confirm();
+                          stock();
                         },
                         child: new Text("DELETE"),
                         color: Colors.red,
+                      ),
+                    ),
+                    new Container(
+                      margin: const EdgeInsets.all(10.0),
+                      child: RaisedButton(
+                        onPressed: () {
+                          konfirmasi_pemesanan();
+                          konfirmasi_pemesanan_detail();
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context)=> new GridLayoutRondo()),
+                                (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: new Text("FINISH"),
+                        color: Colors.blue,
                       ),
                     )
                   ],

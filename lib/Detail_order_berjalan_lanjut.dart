@@ -179,8 +179,6 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(image : AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
         child: Stack(
           children: <Widget>[
             new Column(

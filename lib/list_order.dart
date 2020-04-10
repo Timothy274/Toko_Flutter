@@ -18,20 +18,32 @@ class list extends StatefulWidget{
 }
 
 class ListRondo extends State<list> {
-  var _pekerja =['Semua','Default','Eko','Wahyu'];
-  var _currentpekerja='Semua';
   List _selectedId = List();
   List _selectedPekerja = List();
+  String _mySelection1 = "Eko";
+  String _mySelection2;
+  List _pekerja = List(); //edited line
 
   TextEditingController controller = new TextEditingController();
   String filter;
 
   void initState(){
     super.initState();
+    getSWData();
     controller.addListener(() {
       setState(() {
         filter = controller.text;
       });
+    });
+  }
+
+  Future<String> getSWData() async {
+    final response = await http.get("http://timothy.buzz/juljol/get_list_pegawai.php");
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      _pekerja = responseJson;
+
     });
   }
 
@@ -106,15 +118,17 @@ class ListRondo extends State<list> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(image : AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),
-        ),
         child: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 50),
+                  margin: EdgeInsets.only(top: 50, left: 20, right: 20),
+                  padding: EdgeInsets.only(bottom: 20, top: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                      borderRadius: new BorderRadius.all(Radius.circular(25.0)),
+                  ),
                   child: Column(
                     children: <Widget>[
                       Padding(
@@ -132,18 +146,20 @@ class ListRondo extends State<list> {
                       new Container(
                         width: 270.0,
                         child: DropdownButton<String>(
-                          items: _pekerja.map((String dropDownStringItem){
+                          items: _pekerja.map((item){
                             return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem),
+                              value: item['Nama'],
+                              child: Text(item['Nama']),
                             );
                           }).toList(),
                           onChanged: (String newValueSelected) {
                             setState(() {
-                              this._currentpekerja = newValueSelected;
+                              this._mySelection2 = newValueSelected;
+                              print(_mySelection2);
                             });
                           },
-                          value: _currentpekerja,
+                          hint: Text('Pegawai'),
+                          value: _mySelection2,
                         ),
                       ),
                     ],
@@ -152,8 +168,15 @@ class ListRondo extends State<list> {
 
                 Expanded(
                     child: Container(
-                      padding: const EdgeInsets.only(bottom: 60),
-                      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                      padding: const EdgeInsets.only(bottom: 30),
+                      margin: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                          borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(25.0),
+                            topRight: const Radius.circular(25.0),
+                          )
+                      ),
                       child: FutureBuilder<List>(
                         future: getData(),
                         builder: (context, snapshot) {
@@ -162,9 +185,9 @@ class ListRondo extends State<list> {
                               ? new ListView.builder(
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, i) {
-                                  return (_currentpekerja == null && filter == null ||
-                                      (_currentpekerja == "" && filter == null) ||
-                                      (_currentpekerja == "Semua" && filter == null))
+                                  return (_mySelection2 == null && filter == null ||
+                                      (_mySelection2 == "" && filter == null) ||
+                                      (_mySelection2 == "Semua" && filter == null))
                                   ? new Container(
                                     padding: const EdgeInsets.all(10.0),
                                     child: new GestureDetector(
@@ -206,7 +229,7 @@ class ListRondo extends State<list> {
                                       ),
                                     ),
                                   )
-                                  : (snapshot.data[i]['Alamat'] == filter) && (snapshot.data[i]['Pekerja'] == _currentpekerja)
+                                  : (snapshot.data[i]['Alamat'] == filter) && (snapshot.data[i]['Pekerja'] == _mySelection2)
                                       ? new Container(
                                     padding: const EdgeInsets.all(10.0),
                                     child: new GestureDetector(
@@ -248,7 +271,7 @@ class ListRondo extends State<list> {
                                       ),
                                     ),
                                   )
-                                      : ((snapshot.data[i]['Alamat'] == filter) && (_currentpekerja == null)) || ((snapshot.data[i]['Pekerja'] == _currentpekerja) && (filter == null))
+                                      : ((snapshot.data[i]['Alamat'] == filter) && (_mySelection2 == null)) || ((snapshot.data[i]['Pekerja'] == _mySelection2) && (filter == null))
                                       ? new Container(
                                     padding: const EdgeInsets.all(10.0),
                                     child: new GestureDetector(
