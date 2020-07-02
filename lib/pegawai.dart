@@ -7,6 +7,7 @@ import 'package:juljol/pegawai_list.dart';
 import './detail.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class Pegawai extends StatefulWidget{
   @override
@@ -16,22 +17,38 @@ class Pegawai extends StatefulWidget{
 }
 
 class PegawaiRondo extends State<Pegawai>{
-  List _selectedId = List();
+  List _selectedPegawai = List();
+  List _selectedNama = List();
 
   Future<List> getData() async {
     final response = await http.get("http://timothy.buzz/juljol/get_pegawai.php");
     return json.decode(response.body);
   }
 
-  void _onCategorySelected(bool selected, _searchId) {
+  void _onCategorySelected(bool selected, _searchId, _searchNama) {
     if (selected == true) {
       setState(() {
-        _selectedId.add(_searchId);
-
+        _selectedPegawai.add(_searchId);
+        _selectedNama.add(_searchNama);
       });
     } else {
       setState(() {
-        _selectedId.remove(_searchId);
+        _selectedPegawai.remove(_searchId);
+        _selectedNama.remove(_searchNama);
+      });
+    }
+  }
+
+  void absensi(hari, bulan, tahun){
+    var url = "http://timothy.buzz/juljol/addabsensi.php";
+    var p = _selectedPegawai.length;
+    for (int a = 0; a < p;a++){
+      http.post(url, body: {
+        "id_pegawai": _selectedPegawai[a],
+        "nama" : _selectedNama[a],
+        "tanggal": hari,
+        "bulan" : bulan,
+        "tahun" : tahun
       });
     }
   }
@@ -84,16 +101,6 @@ class PegawaiRondo extends State<Pegawai>{
                                                     ),
                                                   ),
                                                 ),
-                                                Container(
-                                                  margin: const EdgeInsets.only(right: 20.0),
-                                                  child: Checkbox(
-                                                    value: _selectedId.contains(snapshot.data[i]['id_pegawai']),
-                                                    onChanged: (bool selected){
-                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pegawai']));
-                                                    },
-                                                  ),
-                                                  alignment: Alignment.centerRight,
-                                                ),
                                               ],
                                             ),
                                           )
@@ -114,15 +121,6 @@ class PegawaiRondo extends State<Pegawai>{
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-
-        },
-        icon: Icon(Icons.save),
-        label: Text("Absensi"),
-        backgroundColor: Colors.pink,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

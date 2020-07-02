@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,8 @@ import 'package:juljol/list_order.dart';
 import './main.dart';
 
 class dataPass {
-  final String _siul;
+  final String _siulA;
+  final String _siulB;
   final String _aqua;
   final String _vit;
   final String _gasbsr;
@@ -15,7 +17,7 @@ class dataPass {
   final String _vitgls;
   final String _aquagls;
 
-  dataPass(this._siul, this._aqua, this._vit, this._gasbsr, this._gaskcl, this._vitgls, this._aquagls);
+  dataPass(this._siulA,this._siulB, this._aqua, this._vit, this._gasbsr, this._gaskcl, this._vitgls, this._aquagls);
 }
 
 class DataAlamat {
@@ -32,8 +34,8 @@ class DataAlamat {
   factory DataAlamat.fromJson(Map<String, dynamic> json) {
     return DataAlamat(
         id_pemesanan: json['id_pemesanan'],
-        Alamat: json['Alamat'],
-        Pekerja: json['Pekerja'],
+        Alamat: json['ALamat'],
+        Pekerja: json['pengantar'],
     );
   }
 }
@@ -60,7 +62,9 @@ class DataDetail {
 
 class Detail_order_berjalan_lanjut extends StatefulWidget {
   String id;
-  Detail_order_berjalan_lanjut({this.id});
+  String alamat;
+  String pengantar;
+  Detail_order_berjalan_lanjut({this.pengantar,this.alamat,this.id});
   @override
   Detail_order_berjalan_lanjutRondo createState() => new Detail_order_berjalan_lanjutRondo();
 }
@@ -70,7 +74,7 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
   List<DataAlamat> _searchAlamat = [];
   List<DataDetail> _dataDetails = [];
   List<DataDetail> _searchDetails = [];
-  var siul,aqua,vit,gaskcl,gasbsr,vitgls,aquagls;
+  var siulA,siulB,aqua,vit,gaskcl,gasbsr,vitgls,aquagls;
 
   void deleteData(){
     var url="http://timothy.buzz/juljol/delete.php";
@@ -85,8 +89,6 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
       'id_pemesanan': widget.id
     });
   }
-
-
 
   void confirm () {
     AlertDialog alertDialog = new AlertDialog(
@@ -119,9 +121,8 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
   }
 
 
-  Future<List<DataDetail>> getData() async {
-    final responseA = await http.get("http://timothy.buzz/juljol/get.php");
-    final responseJsonA = json.decode(responseA.body);
+
+  Future<List<DataDetail>> getDataBarang() async {
     final responseB = await http.get("http://timothy.buzz/juljol/get_detail.php");
     final responseJsonB = json.decode(responseB.body);
 
@@ -133,7 +134,14 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
         if (dataDetail.id_pemesanan.contains(widget.id))
           _searchDetails.add(dataDetail);
       });
+    });
+  }
 
+  Future<List<DataAlamat>> getDataAlamat() async {
+    final responseA = await http.get("http://timothy.buzz/juljol/get_pemesanan_detail_for_detail_pemeanan_lanjut.php");
+    final responseJsonA = json.decode(responseA.body);
+
+    setState(() {
       for (Map Data in responseJsonA) {
         _dataAlamat.add(DataAlamat.fromJson(Data));
       }
@@ -146,8 +154,11 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
 
   void Detail_Barang(){
     for (var i = 0;i < _searchDetails.length;i++){
-      if (_searchDetails[i].Barang == "Siul"){
-        siul = _searchDetails[i].Jumlah;
+      if (_searchDetails[i].Barang == "SiulA"){
+        siulA = _searchDetails[i].Jumlah;
+      }
+      else if (_searchDetails[i].Barang == "SiulB"){
+        siulB = _searchDetails[i].Jumlah;
       }
       else if (_searchDetails[i].Barang == "Aqua"){
         aqua = _searchDetails[i].Jumlah;
@@ -172,20 +183,24 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
 
   void initState() {
     super.initState();
-    getData();
+    getDataAlamat();
+    getDataBarang();
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(43, 40, 35, 1)
+        ),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Colors.white,
+                      color: Color.fromRGBO(187, 111, 51, 1),
                       borderRadius: BorderRadius.circular(20.0)
                   ),
                   padding: const EdgeInsets.all(15.0),
@@ -195,11 +210,11 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
                     children: [
                       TableRow(children: [
                         Text('Pengantar', style: new TextStyle(fontSize: 25.0),),
-                        Text("${_searchAlamat[0].Pekerja}", style: new TextStyle(fontSize: 25.0),),
+                        Text("${widget.alamat}", style: new TextStyle(fontSize: 25.0),),
                       ]),
                       TableRow(children: [
                         Text('Alamat', style: new TextStyle(fontSize: 25.0),),
-                        Text("${_searchAlamat[0].Alamat}", style: new TextStyle(fontSize: 25.0),),
+                        Text("${widget.pengantar}", style: new TextStyle(fontSize: 25.0),),
                       ]),
                     ],
                   ),
@@ -212,7 +227,7 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
                           if (snapshot.connectionState == ConnectionState.none &&
                               snapshot.hasData == null) {
                             //print('project snapshot data is: ${projectSnap.data}');
-                            return Container();
+                            return CircularProgressIndicator();
                           }
                           return ListView.builder(
                             itemCount: _searchDetails.length,
@@ -222,6 +237,9 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Color.fromRGBO(187, 111, 51, 1)
+                                    ),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
@@ -265,16 +283,6 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
                         color: Colors.green,
                       ),
                     ),
-                    new Container(
-                      margin: const EdgeInsets.all(20.0),
-                      child: RaisedButton(
-                        onPressed: () {
-                          confirm();
-                        },
-                        child: new Text("DELETE"),
-                        color: Colors.red,
-                      ),
-                    )
                   ],
                 )
               ],
@@ -315,7 +323,7 @@ class Detail_order_berjalan_lanjutRondo extends State<Detail_order_berjalan_lanj
   }
 
   void pass_data(BuildContext context) async {
-    dataPass data = new dataPass(siul, aqua, vit, gasbsr, gaskcl, vitgls, aquagls);
+    dataPass data = new dataPass(siulA, siulB , aqua, vit, gasbsr, gaskcl, vitgls, aquagls);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -338,8 +346,8 @@ class EditOrderan extends StatefulWidget{
 
 class EditOderanRondo extends State<EditOrderan>{
 
-  String siul,aqua,vit,gaskcl,gasbsr,vitgls,aquagls;
-  int _n1,_n2,_n3,_n4,_n5,_n6,_n7;
+  String siulA,siulB,aqua,vit,gaskcl,gasbsr,vitgls,aquagls;
+  int _n1,_n2,_n3,_n4,_n5,_n6,_n7,_n8;
 
   void add1() {
     setState(() {
@@ -431,10 +439,24 @@ class EditOderanRondo extends State<EditOrderan>{
         _n7--;
     });
   }
+
+  void add8() {
+    setState(() {
+      _n8++;
+    });
+  }
+
+  void minus8() {
+    setState(() {
+      if (_n8 != 0)
+        _n8--;
+    });
+  }
   @override
   void initState(){
     super.initState();
-    siul = widget.data._siul;
+    siulA = widget.data._siulA;
+    siulB = widget.data._siulB;
     aqua = widget.data._aqua;
     vit = widget.data._vit;
     gaskcl = widget.data._gaskcl;
@@ -442,10 +464,16 @@ class EditOderanRondo extends State<EditOrderan>{
     vitgls = widget.data._vitgls;
     aquagls = widget.data._aquagls;
 
-    if(siul != null){
-      _n1 = int.parse(siul);
+    if(siulA != null){
+      _n1 = int.parse(siulA);
     } else {
       _n1 = 0;
+    }
+
+    if(siulB != null){
+      _n8 = int.parse(siulB);
+    } else {
+      _n8 = 0;
     }
 
     if(aqua != null){
@@ -488,8 +516,6 @@ class EditOderanRondo extends State<EditOrderan>{
   void update(nama, jumlah){
     String Barang = nama.toString();
     String Total = jumlah.toString();
-//    print(Barang);
-//    print(Total);
     var url="http://timothy.buzz/juljol/update_detail.php";
     http.post(url, body: {
       "id_pemesanan" : widget.id,
@@ -500,397 +526,458 @@ class EditOderanRondo extends State<EditOrderan>{
 
 
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(decoration: BoxDecoration(
-      image: DecorationImage(
-          image: AssetImage("assets/androidmobile2.png"), fit: BoxFit.cover),),
-
+    return Scaffold(body: Container(
       child: Stack(
         children: <Widget>[
           new Container(
-            margin: const EdgeInsets.only(bottom: 80, top:90),
+            margin: const EdgeInsets.only(top: 190),
             child: Form(
               child: SingleChildScrollView(
-                child: new Column(
-                  children: <Widget>[
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Isi Ulang",
-                                  style: new TextStyle(fontSize: 30),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 40),
+                  decoration: BoxDecoration(
+                      color: Color.fromRGBO(187, 111, 51, 1),
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(25.0),
+                        topRight: const Radius.circular(25.0),
+                      )
+                  ),
+                  child: new Column(
+                    children: <Widget>[
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Isi Ulang (5500)",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add1,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add1,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n1',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n1',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus1,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus1,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Isi Ulang (6000)",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(top: 50.0, left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Aqua",
-                                  style: new TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add2,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add8,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n2',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n8',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus2,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus8,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(top: 50.0, left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Aqua",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(top: 50.0, left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Vit",
-                                  style: new TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add3,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add2,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n3',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n2',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus3,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus2,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(top: 50.0, left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Vit",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(top: 50.0, left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Gas Kecil",
-                                  style: new TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add4,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add3,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n4',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n3',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus4,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus3,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(top: 50.0, left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Gas Kecil",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(top: 50.0, left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Gas Besar",
-                                  style: new TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add5,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add4,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n5',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n4',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus5,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus4,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(top: 50.0, left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Gas Besar",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(top: 50.0, left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Vit Gelas",
-                                  style: new TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add6,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add5,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n6',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n5',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus6,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus5,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(top: 50.0, left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Vit Gelas",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Container(
-                          margin: const EdgeInsets.only(top: 50.0, left: 40.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: 120.0,
-                                child: Text(
-                                  "Aqua Gelas",
-                                  style: new TextStyle(fontSize: 30),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(left: 40),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: add7,
-                                        child: new Icon(Icons.add, color: Colors.black,),
-                                        backgroundColor: Colors.white,),
-                                    ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add6,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
 
-                                    new Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10),
-                                      child: Text('$_n7',
-                                          style: new TextStyle(fontSize: 40.0)),
-                                    ),
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n6',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
 
-                                    new Container(
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        onPressed: minus7,
-                                        child: new Icon(
-                                            const IconData(0xe15b, fontFamily: 'MaterialIcons'),
-                                            color: Colors.black),
-                                        backgroundColor: Colors.white,),
-                                    )
-                                  ],
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus6,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      new Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: const EdgeInsets.only(top: 50.0, left: 40.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  width: 120.0,
+                                  child: Text(
+                                    "Aqua Gelas",
+                                    style: new TextStyle(fontSize: 30),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                                Container(
+                                  margin: const EdgeInsets.only(left: 40),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: add7,
+                                          child: new Icon(Icons.add, color: Colors.black,),
+                                          backgroundColor: Colors.white,),
+                                      ),
+
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10),
+                                        child: Text('$_n7',
+                                            style: new TextStyle(fontSize: 40.0)),
+                                      ),
+
+                                      new Container(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          onPressed: minus7,
+                                          child: new Icon(
+                                              const IconData(0xe15b, fontFamily: 'MaterialIcons'),
+                                              color: Colors.black),
+                                          backgroundColor: Colors.white,),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -901,47 +988,56 @@ class EditOderanRondo extends State<EditOrderan>{
       floatingActionButton: FloatingActionButton.extended(
         heroTag: "tambah",
         onPressed: () {
-          if (_n1 != null){
-            var nama = "Siul";
-            var jumlah = _n1;
-            update(nama, jumlah);
+          if (_n1 == 0 && _n2 == 0 && _n3 == 0 && _n4 == 0 && _n5 == 0 && _n6 == 0 && _n7 == 0 && _n8 == 0){
+            _showDialogPilihan();
+          } else {
+            if (_n1 != null){
+              var nama = "SiulA";
+              var jumlah = _n1;
+              update(nama, jumlah);
+            }
+            if (_n2 != null){
+              var nama = "Aqua";
+              var jumlah = _n2;
+              update(nama, jumlah);
+            }
+            if (_n3 != null){
+              var nama = "Vit";
+              var jumlah = _n3;
+              update(nama, jumlah);
+            }
+            if (_n4 != null){
+              var nama = "Gas_bsr";
+              var jumlah = _n4;
+              update(nama, jumlah);
+            }
+            if (_n5 != null){
+              var nama = "Gas_kcl";
+              var jumlah = _n5;
+              update(nama, jumlah);
+            }
+            if (_n6 != null){
+              var nama = "Vit_gls";
+              var jumlah = _n6;
+              update(nama, jumlah);
+            }
+            if (_n7 != null){
+              var nama = "Aqua_gls";
+              var jumlah = _n7;
+              update(nama, jumlah);
+            }
+            if (_n8 != null){
+              var nama = "SiulB";
+              var jumlah = _n7;
+              update(nama, jumlah);
+            }
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context)=> new GridLayoutRondo()),
+                  (Route<dynamic> route) => false,
+            );
           }
-          if (_n2 != null){
-            var nama = "Aqua";
-            var jumlah = _n2;
-            update(nama, jumlah);
-          }
-          if (_n3 != null){
-            var nama = "Vit";
-            var jumlah = _n3;
-            update(nama, jumlah);
-          }
-          if (_n4 != null){
-            var nama = "Gas_bsr";
-            var jumlah = _n4;
-            update(nama, jumlah);
-          }
-          if (_n5 != null){
-            var nama = "Gas_kcl";
-            var jumlah = _n5;
-            update(nama, jumlah);
-          }
-          if (_n6 != null){
-            var nama = "Vit_gls";
-            var jumlah = _n6;
-            update(nama, jumlah);
-          }
-          if (_n7 != null){
-            var nama = "Aqua_gls";
-            var jumlah = _n7;
-            update(nama, jumlah);
-          }
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context)=> new GridLayoutRondo()),
-                (Route<dynamic> route) => false,
-          );
         },
         icon: Icon(Icons.save),
         label: Text("Save"),
@@ -949,7 +1045,34 @@ class EditOderanRondo extends State<EditOrderan>{
       ),
     );
   }
-
+  void _showDialogPilihan() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Data kosong"),
+          content: new Text("Apakah data ingin dihapus ?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Hapus"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class EditPemesanan extends StatefulWidget{

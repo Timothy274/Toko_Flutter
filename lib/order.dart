@@ -8,92 +8,12 @@ import 'package:jiffy/jiffy.dart';
 import 'dart:async';
 import 'dart:convert';
 
-class DataBarang {
-  String id_barang;
-  String Nama;
-  String Harga;
-  String Stok;
-  String Berat;
-
-  DataBarang ({
-    this.id_barang,
-    this.Nama,
-    this.Harga,
-    this.Stok,
-    this.Berat,
-  });
-
-  factory DataBarang.fromJson(Map<String, dynamic> json) {
-    return DataBarang(
-        id_barang: json['id_barang'],
-        Nama: json['Nama'],
-        Harga: json['Harga'],
-        Stok: json['Stok'],
-        Berat: json['Berat']
-    );
-  }
-}
-
-class DataDetail {
-  String id_pemesanan;
-  String Barang;
-  String Jumlah;
-
-  DataDetail({
-    this.id_pemesanan,
-    this.Barang,
-    this.Jumlah,
-  });
-
-  factory DataDetail.fromJson(Map<String, dynamic> json) {
-    return DataDetail(
-        id_pemesanan: json['id_pemesanan'],
-        Barang: json['Barang'],
-        Jumlah: json['Jumlah']
-    );
-  }
-}
-
-class DataAlamat {
-  String id_pemesanan;
-  String Alamat;
-  String Pekerja;
-
-  DataAlamat({
-    this.id_pemesanan,
-    this.Alamat,
-    this.Pekerja,
-  });
-
-  factory DataAlamat.fromJson(Map<String, dynamic> json) {
-    return DataAlamat(
-        id_pemesanan: json['id_pemesanan'],
-        Alamat: json['Alamat'],
-        Pekerja: json['Pekerja']
-    );
-  }
-}
-
-class DataCek {
-  String nama;
-
-  DataCek({
-    this.nama,
-  });
-
-  factory DataCek.fromJson(Map<String, dynamic> json) {
-    return DataCek(
-        nama: json['pengantar']
-    );
-  }
-}
-
-
 
 class Order extends StatefulWidget{
   List list;
   String pekerja;
-  Order({this.list,this.pekerja});
+  String idPegawai;
+  Order({this.list,this.pekerja,this.idPegawai});
   @override
   State<StatefulWidget> createState() {
     return OrderRondo();
@@ -109,15 +29,16 @@ class OrderRondo extends State<Order> {
   List<DataAlamat> _dataDetailsAlamat = [];
   List<DataAlamat> _searchDetailsAlamat = [];
   List<DataCek>_dataDetailsCekData = [];
-  int siul = 0;
+  int siulA = 0;
+  int siulB = 0;
   int aqua = 0;
   int vit = 0;
   int gaskcl = 0;
   int gasbsr = 0;
   int vitgls = 0;
   int aquagls = 0;
-  int hrgsiul,hrgaqua,hrgvit,hrggaskcl,hrggasbsr,hrgvitgls,hrgaquagls,total;
-  int brtsiul,brtaqua,brtvit,brtgaskcl,brtgasbsr,brtvitgls,brtaquagls,totalberat;
+  int hrgsiulA,hrgsiulB,hrgaqua,hrgvit,hrggaskcl,hrggasbsr,hrgvitgls,hrgaquagls,total;
+  int brtsiulA,brtsiulB,brtaqua,brtvit,brtgaskcl,brtgasbsr,brtvitgls,brtaquagls,totalberat;
   int Modal;
   var tahun = Jiffy().format("yyyy-MM-dd");
   var waktu = Jiffy().format("HH:mm:SS");
@@ -165,9 +86,11 @@ class OrderRondo extends State<Order> {
 
     var p = _searchDetails.length;
     for (int a = 0;a < p;a++){
-      if(_searchDetails[a].Barang == 'Siul'){
-        siul = siul + int.parse(_searchDetails[a].Jumlah);
-      } else if (_searchDetails[a].Barang == 'Aqua'){
+      if(_searchDetails[a].Barang == 'SiulA'){
+        siulA = siulA + int.parse(_searchDetails[a].Jumlah);
+      } else if (_searchDetails[a].Barang == 'SiulB'){
+        siulB = siulB + int.parse(_searchDetails[a].Jumlah);
+      }else if (_searchDetails[a].Barang == 'Aqua'){
         aqua = aqua + int.parse(_searchDetails[a].Jumlah);
       } else if (_searchDetails[a].Barang == 'Vit'){
         vit = vit + int.parse(_searchDetails[a].Jumlah);
@@ -182,7 +105,8 @@ class OrderRondo extends State<Order> {
       }
     }
 
-    hrgsiul = siul * int.parse(_dataDetailsBarang[0].Harga);
+    hrgsiulA = siulA * int.parse(_dataDetailsBarang[0].Harga);
+    hrgsiulB = siulB * int.parse(_dataDetailsBarang[1].Harga);
     hrgaqua = aqua * int.parse(_dataDetailsBarang[2].Harga);
     hrgvit = vit * int.parse(_dataDetailsBarang[3].Harga);
     hrggaskcl = gaskcl * int.parse(_dataDetailsBarang[4].Harga);
@@ -190,9 +114,10 @@ class OrderRondo extends State<Order> {
     hrgvitgls = vitgls * int.parse(_dataDetailsBarang[6].Harga);
     hrgaquagls = aquagls * int.parse(_dataDetailsBarang[7].Harga);
 
-    total = hrgsiul + hrgaqua + hrgvit + hrggaskcl + hrggasbsr + hrgvitgls + hrgaquagls;
+    total = hrgsiulA + hrgsiulB + hrgaqua + hrgvit + hrggaskcl + hrggasbsr + hrgvitgls + hrgaquagls;
 
-    brtsiul = siul * int.parse(_dataDetailsBarang[0].Berat);
+    brtsiulA = siulA * int.parse(_dataDetailsBarang[0].Berat);
+    brtsiulB = siulB * int.parse(_dataDetailsBarang[1].Berat);
     brtaqua = aqua * int.parse(_dataDetailsBarang[2].Berat);
     brtvit = vit * int.parse(_dataDetailsBarang[3].Berat);
     brtgaskcl = gaskcl * int.parse(_dataDetailsBarang[4].Berat);
@@ -200,7 +125,7 @@ class OrderRondo extends State<Order> {
     brtvitgls = vitgls * int.parse(_dataDetailsBarang[6].Berat);
     brtaquagls = aquagls * int.parse(_dataDetailsBarang[7].Berat);
 
-    totalberat = brtsiul + brtaqua + brtvit + brtgaskcl + brtgasbsr + brtvitgls + brtaquagls;
+    totalberat = brtsiulA + brtsiulB + brtaqua + brtvit + brtgaskcl + brtgasbsr + brtvitgls + brtaquagls;
 
     if(total < 10000){
       Modal = 10000;
@@ -254,7 +179,6 @@ class OrderRondo extends State<Order> {
     });
   }
 
-
   void initState(){
     super.initState();
     getData();
@@ -268,9 +192,9 @@ class OrderRondo extends State<Order> {
 
   void PilihPegawai(){
     if(_mySelection == "Default") {
-      _ignoring = false;
-    } else {
       _ignoring = true;
+    } else {
+      _ignoring = false;
     }
   }
 
@@ -278,7 +202,7 @@ class OrderRondo extends State<Order> {
     var p = _dataDetailsCekData.length;
     int b = eksepsi;
     for (int a = 0; a < p;a++){
-      if(_dataDetailsCekData[a].nama == widget.pekerja){
+      if(_dataDetailsCekData[a].nama == _mySelection){
         b++;
       }
     }
@@ -313,6 +237,7 @@ class OrderRondo extends State<Order> {
       );
     }
   }
+
   void cek_pengantar(){
     if(_mySelection == "Default") {
       showDialog(
@@ -352,7 +277,8 @@ class OrderRondo extends State<Order> {
     var url = "http://timothy.buzz/juljol/addpemesanan.php";
     http.post(url, body: {
       "id_order": id,
-      "pengantar": widget.pekerja,
+      "id_pegawai": widget.idPegawai,
+      "pengantar": _mySelection,
       "Tanggal" : tahun,
       "Waktu": waktu,
       "Berat" : totalberat.toString(),
@@ -370,7 +296,8 @@ class OrderRondo extends State<Order> {
       http.post(url, body: {
         "id_order": id,
         "id_pemesanan": _searchDetailsAlamat[x].id_pemesanan,
-        "Alamat" : _searchDetailsAlamat[x].Alamat
+        "Alamat" : _searchDetailsAlamat[x].Alamat,
+        "Catatan" : _searchDetailsAlamat[x].Catatan
       });
     }
   }
@@ -378,6 +305,7 @@ class OrderRondo extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Container(
+
       child: Stack(
         children: <Widget>[
           SingleChildScrollView(
@@ -396,7 +324,7 @@ class OrderRondo extends State<Order> {
                       Container(
                         margin: const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0, bottom: 10.0),
                         child: Text(
-                          widget.pekerja,
+                          _mySelection,
                           style: new TextStyle(fontSize: 30),
                         ),
                       ),
@@ -467,9 +395,14 @@ class OrderRondo extends State<Order> {
                     ],
                     rows: [
                       DataRow(cells: [
-                        DataCell(Text('Isi Ulang')),
-                        DataCell(Text(siul.toString())),
-                        DataCell(Text(hrgsiul.toString())),
+                        DataCell(Text('Isi Ulang (5500)')),
+                        DataCell(Text(siulA.toString())),
+                        DataCell(Text(hrgsiulA.toString())),
+                      ]),
+                      DataRow(cells: [
+                        DataCell(Text('Isi Ulang (6000)')),
+                        DataCell(Text(siulB.toString())),
+                        DataCell(Text(hrgsiulB.toString())),
                       ]),
                       DataRow(cells: [
                         DataCell(Text('Aqua')),
@@ -546,3 +479,105 @@ class OrderRondo extends State<Order> {
     );
   }
 }
+
+class DataPegawai {
+  String id_pegawai;
+  String Nama;
+
+
+  DataPegawai({
+    this.id_pegawai,
+    this.Nama
+  });
+
+  factory DataPegawai.fromJson(Map<String, dynamic> json) {
+    return DataPegawai(
+        id_pegawai: json['id_pegawai'],
+        Nama: json['Nama']
+    );
+  }
+}
+
+class DataBarang {
+  String id_barang;
+  String Nama;
+  String Harga;
+  String Stok;
+  String Berat;
+
+  DataBarang ({
+    this.id_barang,
+    this.Nama,
+    this.Harga,
+    this.Stok,
+    this.Berat,
+  });
+
+  factory DataBarang.fromJson(Map<String, dynamic> json) {
+    return DataBarang(
+        id_barang: json['id_barang'],
+        Nama: json['Nama'],
+        Harga: json['Harga'],
+        Stok: json['Stok'],
+        Berat: json['Berat']
+    );
+  }
+}
+
+class DataDetail {
+  String id_pemesanan;
+  String Barang;
+  String Jumlah;
+
+  DataDetail({
+    this.id_pemesanan,
+    this.Barang,
+    this.Jumlah,
+  });
+
+  factory DataDetail.fromJson(Map<String, dynamic> json) {
+    return DataDetail(
+        id_pemesanan: json['id_pemesanan'],
+        Barang: json['Barang'],
+        Jumlah: json['Jumlah']
+    );
+  }
+}
+
+class DataAlamat {
+  String id_pemesanan;
+  String Alamat;
+  String Pekerja;
+  String Catatan;
+
+  DataAlamat({
+    this.id_pemesanan,
+    this.Alamat,
+    this.Pekerja,
+    this.Catatan
+  });
+
+  factory DataAlamat.fromJson(Map<String, dynamic> json) {
+    return DataAlamat(
+        id_pemesanan: json['id_pemesanan'],
+        Alamat: json['Alamat'],
+        Pekerja: json['Pekerja'],
+        Catatan: json['Catatan']
+    );
+  }
+}
+
+class DataCek {
+  String nama;
+
+  DataCek({
+    this.nama,
+  });
+
+  factory DataCek.fromJson(Map<String, dynamic> json) {
+    return DataCek(
+        nama: json['pengantar']
+    );
+  }
+}
+

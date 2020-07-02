@@ -34,7 +34,13 @@ dependencies:
   pull_to_refresh: ^1.5.7
   js: ^0.6.1+1
   flutter_datetime_picker: ^1.3.5
-
+  flutter_counter: ^1.0.3
+  charts_flutter: ^0.9.0
+  rxdart: ^0.24.0
+  carousel_slider: ^2.0.0
+  pdf: ^1.8.1
+  printing: ^3.5.0
+  shared_preferences: ^0.5.7+3
 
 
 dev_dependencies:
@@ -48,13 +54,17 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    - assets/androidmobile2.png
-    - assets/calendar.png
-    - assets/family_time.png
-    - assets/friends.png
-    - assets/lovely_time.png
-    - assets/me_time.png
-    - assets/team_time.png
+    - assets/baseline_note_add_black_.png
+    - assets/outline_assessment_black.png
+    - assets/outline_people_alt_black.png
+    - assets/baseline_playlist_add_black.png
+    - assets/baseline_hourglass_empty_black.png
+    - assets/baseline_list_black.png
+    - assets/outline_store_black.png
+    - assets/logo.png
+    - assets/OpenSans-Regular.ttf
+    - assets/OpenSans-Bold.ttf
+    - assets/OpenSans-Italic.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

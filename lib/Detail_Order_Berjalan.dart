@@ -13,12 +13,14 @@ class DataDetail {
   String id_pemesanan;
   String Alamat;
   String status;
+  String Catatan;
 
   DataDetail({
     this.id_pemesanan,
     this.id_order,
     this.status,
-    this.Alamat
+    this.Alamat,
+    this.Catatan
   });
 
   factory DataDetail.fromJson(Map<String, dynamic> json) {
@@ -26,7 +28,8 @@ class DataDetail {
         id_order: json['id_order'],
         id_pemesanan: json['id_pemesanan'],
         status: json['status'],
-        Alamat: json['ALamat']
+        Alamat: json['ALamat'],
+        Catatan: json['Catatan']
     );
   }
 }
@@ -52,6 +55,7 @@ class DataBarangDetail {
 }
 
 class DataBarang {
+  String id_barang;
   String Nama;
   String Harga;
   String Stok;
@@ -60,6 +64,7 @@ class DataBarang {
   String Jumlah;
 
   DataBarang({
+    this.id_barang,
     this.Nama,
     this.Harga,
     this.Stok,
@@ -70,6 +75,7 @@ class DataBarang {
 
   factory DataBarang.fromJson(Map<String, dynamic> json) {
     return DataBarang(
+        id_barang: json['id_barang'],
         Nama: json['Nama'],
         Harga: json['Harga'],
         Stok: json['Stok'],
@@ -126,7 +132,9 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
     });
   }
 
+  Future cek() async {
 
+  }
 
   void confirm () {
     AlertDialog alertDialog = new AlertDialog(
@@ -212,9 +220,9 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
     });
   }
 
-
   void initState() {
     super.initState();
+    cek();
     getData();
     getDataBarang();
     getBarang();
@@ -241,8 +249,10 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
       http.post(url, body: {
         "id_pemesanan": _searchDetails[b].id_pemesanan,
         "Tanggal": widget.list[widget.index]['Tanggal'],
-        "Pekerja" : widget.list[widget.index]['pengantar'],
+        "NamaPegawai" : widget.list[widget.index]['pengantar'],
         "Alamat": _searchDetails[b].Alamat,
+        "idPekerja": widget.list[widget.index]['id_pegawai'],
+        "Catatan": _searchDetails[b].Catatan
       });
     }
   }
@@ -272,13 +282,16 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(43, 40, 35, 1)
+        ),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Colors.orange,
+                      color: Color.fromRGBO(187, 111, 51, 1),
                       borderRadius: new BorderRadius.only(
                         bottomLeft: const Radius.circular(25.0),
                         bottomRight: const Radius.circular(25.0),
@@ -316,33 +329,36 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
                           return ListView.builder(
                             itemCount: _searchDetails.length,
                             itemBuilder: (context, i){
-                              return Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
+                              return new Container(
+                                padding: const EdgeInsets.all(10.0),
+                                child: new GestureDetector(
+                                  onTap: ()=>Navigator.of(context).push(
+                                      new MaterialPageRoute(
+                                          builder: (BuildContext context)=> new Detail_order_berjalan_lanjut(id: _searchDetails[i].id_pemesanan,alamat: _searchDetails[i].Alamat,pengantar: widget.list[widget.index]['pengantar'],)
+                                      )
                                   ),
-                                  color: Colors.orange,
-                                  child: Container(
-                                    child: GestureDetector(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Column(
-                                            children: <Widget>[
-                                              Container(
-                                                margin: const EdgeInsets.only(left: 20.0),
-                                                padding: const EdgeInsets.all(20.0),
-                                                child: Text(_searchDetails[i].Alamat, style: TextStyle(fontSize: 30.0),),
+                                  child: new Card(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Color.fromRGBO(187, 111, 51, 1)
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: new ListTile(
+                                                title: new Text(
+                                                  _searchDetails[i].Alamat,
+                                                  style: TextStyle(fontSize: 25.0,
+                                                ),
                                               ),
-                                            ],
-                                          ),
-
-                                        ],
-                                      ),
-                                      onTap: (){
-                                        kirim(_searchDetails[i].Alamat);
-                                      }
-                                    )
+                                            ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                   ),
+                                ),
                               );
                             },
                           );
@@ -375,7 +391,7 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
                       margin: const EdgeInsets.all(10.0),
                       child: RaisedButton(
                         onPressed: () {
-                          stock();
+                          confirm();
                         },
                         child: new Text("DELETE"),
                         color: Colors.red,
@@ -433,7 +449,7 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
           new OutlineButton(
               child: new Text("Ubah Pesanan"),
               onPressed: (){
-                pass_data(context);
+                pass_ubah_data(context);
               },
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
           )
@@ -442,7 +458,11 @@ class Detail_Order_berjalanRondo extends State<Detail_Order_berjalan> {
     );
   }
 
-  void pass_data(BuildContext context) async {
+  void pass_data(String id){
+
+  }
+
+  void pass_ubah_data(BuildContext context) async {
 
   }
 }

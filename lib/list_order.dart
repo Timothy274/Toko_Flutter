@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +19,7 @@ class list extends StatefulWidget{
 class ListRondo extends State<list> {
   List _selectedId = List();
   List _selectedPekerja = List();
+  List _selectedIdPekerja = List();
   String _mySelection1 = "Eko";
   String _mySelection2;
   List _pekerja = List(); //edited line
@@ -43,7 +43,6 @@ class ListRondo extends State<list> {
 
     setState(() {
       _pekerja = responseJson;
-
     });
   }
 
@@ -93,16 +92,18 @@ class ListRondo extends State<list> {
     );
   }
 
-  void _onCategorySelected(bool selected, _searchId, _searchPekerja) {
+  void _onCategorySelected(bool selected, _searchId, _searchPekerja, _searchIdPekerja) {
     if (selected == true) {
       setState(() {
         _selectedId.add(_searchId);
+        _selectedIdPekerja.add(_searchIdPekerja);
         _selectedPekerja.add(_searchPekerja);
 
       });
     } else {
       setState(() {
         _selectedId.remove(_searchId);
+        _selectedIdPekerja.remove(_searchIdPekerja);
         _selectedPekerja.remove(_searchPekerja);
       });
     }
@@ -118,6 +119,9 @@ class ListRondo extends State<list> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(43, 40, 35, 1)
+        ),
         child: Stack(
           children: <Widget>[
             Column(
@@ -126,7 +130,7 @@ class ListRondo extends State<list> {
                   margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                   padding: EdgeInsets.only(bottom: 20, top: 20),
                   decoration: BoxDecoration(
-                    color: Colors.orange,
+                    color: Color.fromRGBO(187, 111, 51, 1),
                       borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                   ),
                   child: Column(
@@ -171,7 +175,7 @@ class ListRondo extends State<list> {
                       padding: const EdgeInsets.only(bottom: 30),
                       margin: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
                       decoration: BoxDecoration(
-                        color: Colors.orange,
+                        color: Color.fromRGBO(187, 111, 51, 1),
                           borderRadius: new BorderRadius.only(
                             topLeft: const Radius.circular(25.0),
                             topRight: const Radius.circular(25.0),
@@ -208,7 +212,7 @@ class ListRondo extends State<list> {
                                                       style: TextStyle(fontSize: 25.0, color: Colors.orangeAccent),
                                                     ),
                                                     subtitle: new Text(
-                                                      "Pengantar : ${snapshot.data [i]['Pekerja']}",
+                                                      "Pengantar : ${snapshot.data [i]['NamaPekerja']}",
                                                       style: TextStyle(fontSize: 20.0, color: Colors.black),
                                                     ),
                                                   ),
@@ -218,7 +222,7 @@ class ListRondo extends State<list> {
                                                   child: Checkbox(
                                                     value: _selectedId.contains(snapshot.data[i]['id_pemesanan']),
                                                     onChanged: (bool selected){
-                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pemesanan']), snapshot.data[i]['Pekerja']);
+                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pemesanan']), (snapshot.data[i]['NamaPekerja']), (snapshot.data[i]['id_pekerja']));
                                                     },
                                                   ),
                                                   alignment: Alignment.centerRight,
@@ -260,7 +264,7 @@ class ListRondo extends State<list> {
                                                   child: Checkbox(
                                                     value: _selectedId.contains(snapshot.data[i]['id_pemesanan']),
                                                     onChanged: (bool selected){
-                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pemesanan']), snapshot.data[i]['Pekerja']);
+                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pemesanan']), (snapshot.data[i]['NamaPekerja']), (snapshot.data[i]['id_pekerja']));
                                                     },
                                                   ),
                                                   alignment: Alignment.centerRight,
@@ -302,7 +306,7 @@ class ListRondo extends State<list> {
                                                   child: Checkbox(
                                                     value: _selectedId.contains(snapshot.data[i]['id_pemesanan']),
                                                     onChanged: (bool selected){
-                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pemesanan']), snapshot.data[i]['Pekerja']);
+                                                      _onCategorySelected(selected, (snapshot.data[i]['id_pemesanan']), (snapshot.data[i]['NamaPekerja']), (snapshot.data[i]['id_pekerja']));
                                                     },
                                                   ),
                                                   alignment: Alignment.centerRight,
@@ -331,19 +335,22 @@ class ListRondo extends State<list> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           int b = 0;
-          var p = _selectedPekerja.length;
-          if (_selectedPekerja.isEmpty){
+          var p = _selectedIdPekerja.length;
+          if (_selectedIdPekerja.isEmpty){
             _showDialogerror();
           } else{
             for (int a = 0; a < p;a++){
-              if(_selectedPekerja[a] == _selectedPekerja[0]){
+              if(_selectedIdPekerja[a] == _selectedIdPekerja[0]){
+                print(_selectedIdPekerja[a]);
                 b++;
               }
             }
+            print(b);
+            print(p);
             if (b == p){
               Navigator.of(context).push(
                   new MaterialPageRoute(
-                      builder: (BuildContext context)=> new Order(list:_selectedId, pekerja:_selectedPekerja[0])
+                      builder: (BuildContext context)=> new Order(list:_selectedId, pekerja:_selectedPekerja[0], idPegawai: _selectedIdPekerja[0])
                   )
               );
             } else {

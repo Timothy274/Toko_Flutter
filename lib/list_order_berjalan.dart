@@ -107,6 +107,9 @@ class list_order_berjalanRondo extends State<List_order_berjalan> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(43, 40, 35, 1)
+        ),
         child: Stack(
           children: <Widget>[
             Column(
@@ -115,7 +118,7 @@ class list_order_berjalanRondo extends State<List_order_berjalan> {
                   margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                   padding: EdgeInsets.only(bottom: 20, top: 20),
                   decoration: BoxDecoration(
-                    color: Colors.orange,
+                    color: Color.fromRGBO(187, 111, 51, 1),
                     borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                   ),
                   child: Column(
@@ -158,7 +161,7 @@ class list_order_berjalanRondo extends State<List_order_berjalan> {
                       padding: const EdgeInsets.only(bottom: 30),
                       margin: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
                       decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color.fromRGBO(187, 111, 51, 1),
                           borderRadius: new BorderRadius.only(
                             topLeft: const Radius.circular(25.0),
                             topRight: const Radius.circular(25.0),
@@ -258,14 +261,6 @@ class list_order_berjalanRondo extends State<List_order_berjalan> {
             )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-
-        },
-        icon: Icon(Icons.save),
-        label: Text("Save"),
-        backgroundColor: Colors.pink,
       ),
     );
   }
