@@ -132,14 +132,14 @@ class Detail_order_berjalan_lanjutRondo
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: BorderRadius.circular(20.0)),
                   padding: const EdgeInsets.all(15.0),
                   margin:
@@ -203,7 +203,7 @@ class Detail_order_berjalan_lanjutRondo
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color:
-                                              Color.fromRGBO(187, 111, 51, 1)),
+                                              Color.fromRGBO(76, 177, 247, 1)),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,

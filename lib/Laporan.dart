@@ -685,20 +685,20 @@ class LaporanRondo extends State<Laporan> {
     ];
     return Scaffold(
       body: Container(
-        color: Color.fromRGBO(43, 40, 35, 1),
+        color: Color(0xffffff),
         child: Stack(
           children: <Widget>[
             CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
-                  backgroundColor: Color.fromRGBO(187, 111, 51, 1),
+                  backgroundColor: Color.fromRGBO(76, 177, 247, 1),
                   expandedHeight: 70,
                   floating: true,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
                     title: Text(
                       'Laporan',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15, color: Colors.black),
                     ),
                   ),
                 ),
@@ -709,7 +709,7 @@ class LaporanRondo extends State<Laporan> {
                       margin: const EdgeInsets.only(
                           top: 40.0, left: 10.0, right: 10.0, bottom: 20.0),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(187, 111, 51, 1),
+                        color: Color.fromRGBO(76, 177, 247, 1),
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                       ),
                       child: Column(
@@ -750,7 +750,7 @@ class LaporanRondo extends State<Laporan> {
                           margin: const EdgeInsets.only(
                               top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(187, 111, 51, 1),
+                            color: Color.fromRGBO(76, 177, 247, 1),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(25.0)),
                           ),
@@ -829,7 +829,7 @@ class LaporanRondo extends State<Laporan> {
                                 right: 20.0,
                                 bottom: 20.0),
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(187, 111, 51, 1),
+                              color: Color.fromRGBO(76, 177, 247, 1),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25.0)),
                             ),
@@ -855,7 +855,7 @@ class LaporanRondo extends State<Laporan> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          color: Colors.orangeAccent,
+                                          color: Colors.lightBlueAccent,
                                           onPressed: () {
                                             if (_day == "Bulan") {
                                               _showpilerror();
@@ -882,7 +882,7 @@ class LaporanRondo extends State<Laporan> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          color: Colors.orangeAccent,
+                                          color: Colors.lightBlueAccent,
                                           onPressed: () {
                                             if (_day == "Bulan") {
                                               _showpilerror();

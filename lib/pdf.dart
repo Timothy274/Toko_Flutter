@@ -312,14 +312,14 @@ class pdfRondo extends State<pdf> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+          decoration: BoxDecoration(color: Color(0xffffff)),
           child: Column(
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                 padding: EdgeInsets.only(bottom: 20, top: 10),
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(187, 111, 51, 1),
+                  color: Color.fromRGBO(76, 177, 247, 1),
                   borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                 ),
                 child: Column(
@@ -336,7 +336,7 @@ class pdfRondo extends State<pdf> {
                 margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                 padding: EdgeInsets.only(bottom: 20, top: 10),
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(187, 111, 51, 1),
+                  color: Color.fromRGBO(76, 177, 247, 1),
                   borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                 ),
                 child: Column(
@@ -366,7 +366,7 @@ class pdfRondo extends State<pdf> {
                 child: RaisedButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  color: Colors.orangeAccent,
+                  color: Colors.lightBlueAccent,
                   onPressed: () => _printDocument(widget.month),
                   child: const Text('Cetak Laporan',
                       style: TextStyle(fontSize: 20)),

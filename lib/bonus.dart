@@ -290,7 +290,7 @@ class BonusRondo extends State<Bonus> {
                     Container(
                       width: 1000,
                       decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color.fromRGBO(76, 177, 247, 1),
                           borderRadius: new BorderRadius.only(
                             topLeft: const Radius.circular(25.0),
                             topRight: const Radius.circular(25.0),
@@ -317,7 +317,7 @@ class BonusRondo extends State<Bonus> {
                         margin: const EdgeInsets.only(
                             top: 60.0, left: 20.0, right: 20.0, bottom: 20.0),
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color.fromRGBO(76, 177, 247, 1),
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         ),
                         child: Column(
@@ -365,7 +365,7 @@ class BonusRondo extends State<Bonus> {
                         margin: const EdgeInsets.only(
                             top: 60.0, left: 20.0, right: 20.0, bottom: 20.0),
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color.fromRGBO(76, 177, 247, 1),
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         ),
                         child: Column(
@@ -413,7 +413,7 @@ class BonusRondo extends State<Bonus> {
                         margin: const EdgeInsets.only(
                             top: 60.0, left: 20.0, right: 20.0, bottom: 20.0),
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color.fromRGBO(76, 177, 247, 1),
                           borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         ),
                         child: Column(

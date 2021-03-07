@@ -111,14 +111,14 @@ class order_selesaiRondo extends State<order_selesai> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+          decoration: BoxDecoration(color: Color(0xffffff)),
           child: Column(
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                 padding: EdgeInsets.only(bottom: 20, top: 10),
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(187, 111, 51, 1),
+                  color: Color.fromRGBO(76, 177, 247, 1),
                   borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                 ),
                 child: Column(
@@ -178,6 +178,7 @@ class order_selesaiRondo extends State<order_selesai> {
                                                 ))),
                                     child: new Card(
                                         child: Container(
+                                      color: Colors.lightBlueAccent,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -188,7 +189,7 @@ class order_selesaiRondo extends State<order_selesai> {
                                                 _searchDetails[i].ALamat,
                                                 style: TextStyle(
                                                     fontSize: 25.0,
-                                                    color: Colors.orangeAccent),
+                                                    color: Colors.black),
                                               ),
                                               subtitle: new Text(
                                                 "Pengantar : ${_searchDetails[i].pengantar}",
@@ -232,8 +233,7 @@ class order_selesaiRondo extends State<order_selesai> {
                                                     _searchDetails[i].ALamat,
                                                     style: TextStyle(
                                                         fontSize: 25.0,
-                                                        color: Colors
-                                                            .orangeAccent),
+                                                        color: Colors.black),
                                                   ),
                                                   subtitle: new Text(
                                                     "Pengantar : ${_searchDetails[i].pengantar}",

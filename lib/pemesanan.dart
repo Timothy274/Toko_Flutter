@@ -140,14 +140,14 @@ class PemesananRondo extends State<Pemesanan> {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: true,
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Center(
             child: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.only(top: 170.0, left: 20.0, right: 20.0),
             padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 20),
             decoration: BoxDecoration(
-                color: Color.fromRGBO(187, 111, 51, 1),
+                color: Color.fromRGBO(76, 177, 247, 1),
                 borderRadius: new BorderRadius.only(
                   topLeft: const Radius.circular(25.0),
                   topRight: const Radius.circular(25.0),
@@ -195,17 +195,16 @@ class PemesananRondo extends State<Pemesanan> {
                     padding: const EdgeInsets.only(left: 60, right: 60),
                     alignment: Alignment(-1.0, -1.0),
                     child: new SizedBox(
-                        width: double.infinity,
-                        child: RaisedButton(
+                      width: double.infinity,
+                      child: RaisedButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
-                          color: Color.fromRGBO(43, 40, 35, 1),
+                          color: Color.fromRGBO(76, 177, 247, 1),
                           onPressed: () => _sendDataToSecondScreen(context),
                           child: const Text('Buat Order',
                               style: TextStyle(
-                                  fontSize: 20,
-                                  color: Color.fromRGBO(187, 111, 51, 1))),
-                        ))),
+                                  fontSize: 20, color: Colors.black))),
+                    )),
               ]),
             ),
           ),
@@ -466,7 +465,7 @@ class pemesanan2Rondo extends State<Pemesanan2> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+          decoration: BoxDecoration(color: Color(0xffffff)),
           child: Stack(
             children: <Widget>[
               new Container(
@@ -475,7 +474,7 @@ class pemesanan2Rondo extends State<Pemesanan2> {
                     child: Container(
                         padding: const EdgeInsets.only(top: 40, bottom: 50),
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(187, 111, 51, 1),
+                            color: Color.fromRGBO(76, 177, 247, 1),
                             borderRadius: new BorderRadius.only(
                               topLeft: const Radius.circular(25.0),
                               topRight: const Radius.circular(25.0),
@@ -558,7 +557,7 @@ class pemesanan2Rondo extends State<Pemesanan2> {
         },
         icon: Icon(Icons.add),
         label: Text("Tambah", style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.lightBlueAccent,
       ),
     );
   }

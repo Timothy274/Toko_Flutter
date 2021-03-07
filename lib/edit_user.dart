@@ -68,7 +68,7 @@ class userEditRondo extends State<userEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromRGBO(43, 40, 35, 1),
+        color: Color(0xffffff),
         child: Stack(
           children: <Widget>[
             SingleChildScrollView(
@@ -78,7 +78,7 @@ class userEditRondo extends State<userEdit> {
                     margin: const EdgeInsets.only(
                         top: 100.0, left: 20.0, right: 20.0, bottom: 20.0),
                     child: Card(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
@@ -114,7 +114,7 @@ class userEditRondo extends State<userEdit> {
                       margin: const EdgeInsets.only(
                           top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(187, 111, 51, 1),
+                        color: Color.fromRGBO(76, 177, 247, 1),
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                       ),
                       child: Column(
@@ -202,7 +202,7 @@ class userEditRondo extends State<userEdit> {
                       margin: const EdgeInsets.only(
                           top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(187, 111, 51, 1),
+                        color: Color.fromRGBO(76, 177, 247, 1),
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                       ),
                       child: Column(
@@ -232,7 +232,7 @@ class userEditRondo extends State<userEdit> {
                                   Container(
                                       margin: const EdgeInsets.only(bottom: 25),
                                       child: RaisedButton(
-                                        color: Colors.orangeAccent,
+                                        color: Colors.lightBlueAccent,
                                         onPressed: () {
                                           Navigator.push(
                                               context,

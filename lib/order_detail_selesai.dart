@@ -66,14 +66,14 @@ class detail_order_selesai_rondo extends State<detail_order_selesai> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: new BorderRadius.only(
                         bottomLeft: const Radius.circular(25.0),
                         bottomRight: const Radius.circular(25.0),
@@ -149,7 +149,7 @@ class detail_order_selesai_rondo extends State<detail_order_selesai> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
-                                  color: Color.fromRGBO(187, 111, 51, 1),
+                                  color: Color.fromRGBO(76, 177, 247, 1),
                                   child: Container(
                                     child: Row(
                                       mainAxisAlignment:

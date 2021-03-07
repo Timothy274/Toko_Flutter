@@ -28,7 +28,7 @@ class PegawaiRondo extends State<Pegawai> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
-        color: Color.fromRGBO(43, 40, 35, 1),
+        color: Color(0xffffff),
         child: Stack(
           children: <Widget>[
             Column(
@@ -38,7 +38,7 @@ class PegawaiRondo extends State<Pegawai> {
                   margin:
                       const EdgeInsets.only(top: 170, left: 20.0, right: 20.0),
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: new BorderRadius.only(
                         topLeft: const Radius.circular(40.0),
                         topRight: const Radius.circular(40.0),
@@ -73,7 +73,7 @@ class PegawaiRondo extends State<Pegawai> {
                                                 snapshot.data[i]['Nama'],
                                                 style: TextStyle(
                                                     fontSize: 25.0,
-                                                    color: Colors.orangeAccent),
+                                                    color: Colors.black),
                                               ),
                                             ),
                                           ),
@@ -102,7 +102,6 @@ class PegawaiRondo extends State<Pegawai> {
               builder: (BuildContext context) => new newpegawai()));
         },
       ),
-      backgroundColor: Colors.orangeAccent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

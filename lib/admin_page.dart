@@ -81,7 +81,7 @@ class adminRondo extends State<admin> {
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         child: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+          decoration: BoxDecoration(color: Color(0xffffff)),
           child: Stack(
             children: <Widget>[
               Column(
@@ -90,7 +90,7 @@ class adminRondo extends State<admin> {
                     margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                     padding: EdgeInsets.only(bottom: 20, top: 20),
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                     ),
                     child: Column(
@@ -126,7 +126,7 @@ class adminRondo extends State<admin> {
                     margin:
                         const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(187, 111, 51, 1),
+                        color: Color.fromRGBO(76, 177, 247, 1),
                         borderRadius: new BorderRadius.only(
                           topLeft: const Radius.circular(25.0),
                           topRight: const Radius.circular(25.0),
@@ -161,8 +161,7 @@ class adminRondo extends State<admin> {
                                                   snapshot.data[i]['Username'],
                                                   style: TextStyle(
                                                       fontSize: 25.0,
-                                                      color:
-                                                          Colors.orangeAccent),
+                                                      color: Colors.black),
                                                 ),
                                                 subtitle: new Text(
                                                   snapshot.data[i]['Email'],
@@ -201,7 +200,7 @@ class adminRondo extends State<admin> {
           "Add",
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Color.fromRGBO(76, 177, 247, 1),
       ),
     );
   }

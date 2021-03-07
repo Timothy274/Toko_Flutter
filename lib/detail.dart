@@ -121,14 +121,14 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Stack(
           children: <Widget>[
             new Column(
               children: <Widget>[
                 new Container(
                   decoration: new BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: new BorderRadius.only(
                         bottomLeft: const Radius.circular(25.0),
                         bottomRight: const Radius.circular(25.0),
@@ -218,7 +218,7 @@ class _DetailState extends State<Detail> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0),
                                   ),
-                                  color: Color.fromRGBO(187, 111, 51, 1),
+                                  color: Color.fromRGBO(76, 177, 247, 1),
                                   child: Container(
                                     child: Row(
                                       mainAxisAlignment:
@@ -269,7 +269,7 @@ class _DetailState extends State<Detail> {
                           );
                         },
                         child: new Text("EDIT"),
-                        color: Colors.green,
+                        color: Colors.lightBlueAccent,
                       ),
                     ),
                     new Container(
@@ -461,7 +461,7 @@ class EditOderanRondo extends State<EditOrderan> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+          decoration: BoxDecoration(color: Color(0xffffff)),
           child: Stack(
             children: <Widget>[
               new Container(
@@ -470,7 +470,7 @@ class EditOderanRondo extends State<EditOrderan> {
                     child: Container(
                         padding: const EdgeInsets.only(top: 40, bottom: 50),
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(187, 111, 51, 1),
+                            color: Color.fromRGBO(76, 177, 247, 1),
                             borderRadius: new BorderRadius.only(
                               topLeft: const Radius.circular(25.0),
                               topRight: const Radius.circular(25.0),
@@ -529,10 +529,7 @@ class EditOderanRondo extends State<EditOrderan> {
                                                 heroTag: null,
                                                 onPressed: () =>
                                                     minus(arraybarang[i], i),
-                                                child: new Icon(
-                                                    const IconData(0xe15b,
-                                                        fontFamily:
-                                                            'MaterialIcons'),
+                                                child: new Icon(Icons.remove,
                                                     color: Colors.black),
                                                 backgroundColor: Colors.white,
                                               ),
@@ -559,7 +556,7 @@ class EditOderanRondo extends State<EditOrderan> {
           "Update",
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.lightBlueAccent,
       ),
     );
   }
@@ -769,7 +766,7 @@ class EditPemesananRondo extends State<EditPemesanan> {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: true,
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Center(
             child: SingleChildScrollView(
           child: Container(
@@ -777,7 +774,7 @@ class EditPemesananRondo extends State<EditPemesanan> {
                 top: 150.0, left: 20.0, right: 20.0, bottom: 40),
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20),
             decoration: BoxDecoration(
-                color: Color.fromRGBO(187, 111, 51, 1),
+                color: Color.fromRGBO(76, 177, 247, 1),
                 borderRadius: new BorderRadius.only(
                   topLeft: const Radius.circular(40.0),
                   topRight: const Radius.circular(40.0),
@@ -852,7 +849,7 @@ class EditPemesananRondo extends State<EditPemesanan> {
           "Update",
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.lightBlueAccent,
       ),
     );
   }

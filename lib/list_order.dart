@@ -118,7 +118,7 @@ class ListRondo extends State<list> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Stack(
           children: <Widget>[
             Column(
@@ -127,7 +127,7 @@ class ListRondo extends State<list> {
                   margin: EdgeInsets.only(top: 50, left: 20, right: 20),
                   padding: EdgeInsets.only(bottom: 20, top: 20),
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(187, 111, 51, 1),
+                    color: Color.fromRGBO(76, 177, 247, 1),
                     borderRadius: new BorderRadius.all(Radius.circular(25.0)),
                   ),
                   child: Column(
@@ -164,7 +164,7 @@ class ListRondo extends State<list> {
                   margin:
                       const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: new BorderRadius.only(
                         topLeft: const Radius.circular(25.0),
                         topRight: const Radius.circular(25.0),
@@ -204,8 +204,7 @@ class ListRondo extends State<list> {
                                                           ['Alamat'],
                                                       style: TextStyle(
                                                           fontSize: 25.0,
-                                                          color: Colors
-                                                              .orangeAccent),
+                                                          color: Colors.black),
                                                     ),
                                                     subtitle: new Text(
                                                       "Pengantar : ${snapshot.data[i]['NamaPekerja']}",
@@ -268,8 +267,8 @@ class ListRondo extends State<list> {
                                                               ['Alamat'],
                                                           style: TextStyle(
                                                               fontSize: 25.0,
-                                                              color: Colors
-                                                                  .orangeAccent),
+                                                              color:
+                                                                  Colors.black),
                                                         ),
                                                         subtitle: new Text(
                                                           "Pengantar : ${snapshot.data[i]['NamaPekerja']}",
@@ -351,7 +350,7 @@ class ListRondo extends State<list> {
           "Order",
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.lightBlueAccent,
       ),
     );
   }

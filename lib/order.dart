@@ -398,7 +398,7 @@ class OrderRondo extends State<Order> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Stack(
           children: <Widget>[
             SingleChildScrollView(
@@ -406,7 +406,7 @@ class OrderRondo extends State<Order> {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(187, 111, 51, 1),
+                        color: Color.fromRGBO(76, 177, 247, 1),
                         borderRadius: new BorderRadius.only(
                           topLeft: const Radius.circular(25.0),
                           topRight: const Radius.circular(25.0),
@@ -461,7 +461,7 @@ class OrderRondo extends State<Order> {
                   Container(
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: new BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius:
                           new BorderRadius.all(const Radius.circular(10.0)),
                     ),
@@ -497,7 +497,7 @@ class OrderRondo extends State<Order> {
                       itemCount: array_data_detail.length,
                       itemBuilder: (context, i) {
                         return Card(
-                            color: Color.fromRGBO(187, 111, 51, 1),
+                            color: Color.fromRGBO(76, 177, 247, 1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
@@ -579,7 +579,7 @@ class OrderRondo extends State<Order> {
                     margin: const EdgeInsets.only(
                         top: 50, left: 20.0, right: 20.0, bottom: 20.0),
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     ),
                     child: DataTable(
@@ -604,7 +604,7 @@ class OrderRondo extends State<Order> {
                         top: 100, left: 10.0, right: 10.0, bottom: 120.0),
                     padding: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(187, 111, 51, 1),
+                      color: Color.fromRGBO(76, 177, 247, 1),
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     ),
                     child: new Column(
@@ -692,7 +692,7 @@ class OrderRondo extends State<Order> {
           "Kirim",
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.lightBlueAccent,
       ),
     );
   }

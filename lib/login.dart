@@ -110,7 +110,7 @@ class LoginRondo extends State<login> {
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Stack(
           children: <Widget>[
             Center(
@@ -130,19 +130,19 @@ class LoginRondo extends State<login> {
                       child: TextField(
                         controller: username,
                         style:
-                            TextStyle(color: Color.fromRGBO(187, 111, 51, 1)),
+                            TextStyle(color: Color.fromRGBO(76, 177, 247, 1)),
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(187, 111, 51, 1)),
+                                color: Color.fromRGBO(76, 177, 247, 1)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(187, 111, 51, 1)),
+                                color: Color.fromRGBO(76, 177, 247, 1)),
                           ),
                           hintText: "Username",
                           hintStyle:
-                              TextStyle(color: Color.fromRGBO(187, 111, 51, 1)),
+                              TextStyle(color: Color.fromRGBO(76, 177, 247, 1)),
                         ),
                       ),
                     ),
@@ -152,20 +152,20 @@ class LoginRondo extends State<login> {
                       child: TextField(
                         controller: password,
                         style:
-                            TextStyle(color: Color.fromRGBO(187, 111, 51, 1)),
+                            TextStyle(color: Color.fromRGBO(76, 177, 247, 1)),
                         obscureText: true,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(187, 111, 51, 1)),
+                                color: Color.fromRGBO(76, 177, 247, 1)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                                color: Color.fromRGBO(187, 111, 51, 1)),
+                                color: Color.fromRGBO(76, 177, 247, 1)),
                           ),
                           hintText: "Password",
                           hintStyle:
-                              TextStyle(color: Color.fromRGBO(187, 111, 51, 1)),
+                              TextStyle(color: Color.fromRGBO(76, 177, 247, 1)),
                         ),
                       ),
                     ),
@@ -175,7 +175,7 @@ class LoginRondo extends State<login> {
                         child: new SizedBox(
                             width: double.infinity,
                             child: RaisedButton(
-                              color: Color.fromRGBO(187, 111, 51, 1),
+                              color: Color.fromRGBO(76, 177, 247, 1),
                               onPressed: () {
                                 validasi();
                               },

@@ -115,14 +115,14 @@ class tambahuserRondo extends State<tambahuser> {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: true,
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Center(
             child: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.only(top: 120.0, left: 20.0, right: 20.0),
             padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 20),
             decoration: BoxDecoration(
-                color: Color.fromRGBO(187, 111, 51, 1),
+                color: Color.fromRGBO(76, 177, 247, 1),
                 borderRadius: new BorderRadius.only(
                   topLeft: const Radius.circular(25.0),
                   topRight: const Radius.circular(25.0),
@@ -157,14 +157,13 @@ class tambahuserRondo extends State<tambahuser> {
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
-                          color: Color.fromRGBO(43, 40, 35, 1),
+                          color: Colors.lightBlueAccent,
                           onPressed: () {
                             validasi();
                           },
                           child: const Text('Tambah User',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Color.fromRGBO(187, 111, 51, 1))),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
                         ))),
               ]),
             ),

@@ -461,7 +461,7 @@ class StockRondo extends State<Stock> {
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         child: Container(
-          color: Color.fromRGBO(43, 40, 35, 1),
+          color: Color(0xffffff),
           child: Stack(
             children: <Widget>[
               SingleChildScrollView(
@@ -471,7 +471,7 @@ class StockRondo extends State<Stock> {
                       Container(
                         width: 1000,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(187, 111, 51, 1),
+                            color: Color.fromRGBO(76, 177, 247, 1),
                             borderRadius: new BorderRadius.only(
                               topLeft: const Radius.circular(25.0),
                               topRight: const Radius.circular(25.0),
@@ -490,7 +490,7 @@ class StockRondo extends State<Stock> {
                         ),
                       ),
                       Container(
-                          color: Color.fromRGBO(187, 111, 51, 1),
+                          color: Color.fromRGBO(76, 177, 247, 1),
                           margin: const EdgeInsets.only(
                               top: 50, left: 20.0, right: 20.0, bottom: 150.0),
                           child: SingleChildScrollView(
@@ -546,7 +546,7 @@ class StockRondo extends State<Stock> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: Color.fromRGBO(187, 111, 51, 1),
+        backgroundColor: Color.fromRGBO(76, 177, 247, 1),
         onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new TambahStock(),
         )),
@@ -703,14 +703,14 @@ class TambahStockRondo extends State<TambahStock> {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: true,
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(43, 40, 35, 1)),
+        decoration: BoxDecoration(color: Color(0xffffff)),
         child: Center(
             child: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.only(top: 100.0, left: 20.0, right: 20.0),
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20),
             decoration: BoxDecoration(
-                color: Color.fromRGBO(187, 111, 51, 1),
+                color: Color.fromRGBO(76, 177, 247, 1),
                 borderRadius: new BorderRadius.only(
                   topLeft: const Radius.circular(40.0),
                   topRight: const Radius.circular(40.0),
@@ -758,7 +758,7 @@ class TambahStockRondo extends State<TambahStock> {
         },
         icon: Icon(Icons.save),
         label: Text("Input"),
-        backgroundColor: Color.fromRGBO(187, 111, 51, 1),
+        backgroundColor: Color.fromRGBO(76, 177, 247, 1),
       ),
     );
   }
